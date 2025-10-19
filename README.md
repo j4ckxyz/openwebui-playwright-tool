@@ -30,45 +30,21 @@ A comprehensive Playwright-based web automation tool that enables AI models in O
 
 ## Installation
 
+⚠️ **IMPORTANT:** See [INSTALLATION.md](./INSTALLATION.md) for detailed step-by-step instructions.
+
+### Quick Install
+
+1. **Add to OpenWebUI:** Copy [`playwright_web_search_tool.py`](./playwright_web_search_tool.py) and paste into **Workspace → Tools → + Create Tool**
+2. **Install Browser:** Run `docker exec -it open-webui playwright install chromium`
+3. **Enable Tool:** In chat, click the + icon and enable the Playwright tool
+
 ### Prerequisites
-1. OpenWebUI version 0.4.0 or higher
-2. Python 3.11+
+- OpenWebUI version 0.4.0 or higher
+- Docker or Python 3.11+ environment
+- ~150MB disk space for Chromium browser
 
-### Install Dependencies
-
-**IMPORTANT:** The tool will automatically install the `playwright` package when you save it in OpenWebUI, but you **MUST** manually install the browser binaries afterward.
-
-#### Step 1: Save the Tool in OpenWebUI
-1. Copy the contents of `playwright_web_search_tool.py`
-2. In OpenWebUI, navigate to **Workspace → Tools**
-3. Click **"+ Create Tool"**
-4. Paste the code and click **Save**
-5. Wait for the `playwright` package to install
-
-#### Step 2: Install Browser Binaries
-After the tool is saved, you need to install browser binaries. SSH into your OpenWebUI server or Docker container and run:
-
-```bash
-# For Docker installations
-docker exec -it open-webui playwright install chromium
-
-# For non-Docker installations
-playwright install chromium
-
-# Optional: Install other browsers
-playwright install firefox
-playwright install webkit
-```
-
-**Note:** Installing all browsers takes ~500MB of disk space. Installing just Chromium takes ~150MB.
-
-### Add to OpenWebUI
-
-1. Copy the contents of `playwright_web_search_tool.py`
-2. In OpenWebUI, navigate to **Workspace → Tools**
-3. Click **"+ Create Tool"**
-4. Paste the code
-5. Click **Save**
+### Detailed Instructions
+For Docker setups, troubleshooting, and advanced configuration, see the complete [Installation Guide](./INSTALLATION.md).
 
 ## Configuration (Valves)
 

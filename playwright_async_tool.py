@@ -16,6 +16,7 @@ import asyncio
 from datetime import datetime
 from pydantic import BaseModel, Field
 from typing import Optional, Literal, List
+import os
 from playwright.async_api import async_playwright, Page, Browser, BrowserContext, TimeoutError as PlaywrightTimeoutError
 
 
@@ -56,7 +57,9 @@ class Tools:
         
         if not self.browser:
             browser_type = getattr(self.playwright, self.valves.BROWSER_TYPE)
-            self.browser = await browser_type.launch(headless=self.valves.HEADLESS)
+            # Auto-headless: default to headless if no DISPLAY is set
+            auto_headless = self.valves.HEADLESS or not os.environ.get("DISPLAY")
+            self.browser = await browser_type.launch(headless=auto_headless)
         
         if not self.context:
             self.context = await self.browser.new_context(

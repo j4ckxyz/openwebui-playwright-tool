@@ -1,329 +1,89 @@
-# Playwright Web Search & Automation Tool for OpenWebUI
+# OpenWebUI Playwright Tool (Single-File)
 
-A comprehensive Playwright-based web automation tool that enables AI models in OpenWebUI to search the web, interact with pages, extract content, take screenshots, and perform advanced browser automation tasks.
+One Python tool, one README. Copy `playwright_async_tool.py` into OpenWebUI and you’re ready to automate the web: navigate, click, extract, screenshot.
 
-## 🎯 Which File to Use?
+## Quick Start
 
-### ✅ **Use `playwright_async_tool.py` (v3.0.0)** ← **RECOMMENDED**
-- Async API (works in OpenWebUI's async context)
-- Fixes "Sync API in asyncio loop" error
-- Latest and most compatible version
+- File: `playwright_async_tool.py` (async, recommended)
+- Requires: `playwright` Python package + browser binaries
 
-### Other Versions (for reference)
-- `playwright_web_tool.py` (v2.0.0) - Sync version (causes errors in async environments)
-- `playwright_web_search_tool.py` (v1.0.1) - Old async version (deprecated)
+Steps
+1) In OpenWebUI: Workspace → Tools → + Create Tool → paste the contents of `playwright_async_tool.py` → Save
+2) Install browser once (Docker or local):
+   - Docker: `docker exec -it open-webui playwright install chromium`
+   - Local: `playwright install chromium`
+3) In chat: click + and enable the tool
 
-## Features
+Headless auto: If no DISPLAY is present (servers/containers), the tool launches headless automatically. You can still force headed by setting the `HEADLESS` valve to false when running with a display.
 
-### 🌐 Navigation & Page Control
-- **navigate_to_url()** - Navigate to any URL with configurable wait conditions (load, domcontentloaded, networkidle, commit)
-- **get_page_content()** - Extract HTML, text, title, or current URL from the page
-- **scroll_page()** - Scroll in any direction (up, down, top, bottom) or by specific pixel amounts
+## What You Get
 
-### 🖱️ Element Interaction
-- **click_element()** - Click elements using CSS selectors, text selectors, or ARIA role selectors
-- **fill_input()** - Fill form fields and inputs with optional auto-submit
-- **wait_for_element()** - Wait for elements to appear/disappear/become visible/hidden
+- navigate_to_url(url, wait_until)
+- get_page_text(), get_page_html()
+- click_element(selector, wait_for_navigation)
+- fill_input(selector, value, submit)
+- extract_elements(selector, attributes="text,href", max_elements)
+- take_screenshot(full_page=False, element_selector=None)
+- execute_javascript(script)
+- wait_for_element(selector, state="visible", timeout)
+- search_google(query, num_results)
+- scroll_page(direction)
+- close_browser()
 
-### 📊 Data Extraction
-- **extract_elements()** - Scrape multiple elements with customizable attributes (text, href, src, any HTML attribute)
-- **execute_javascript()** - Run custom JavaScript code for complex DOM manipulation or data extraction
-- **get_cookies()** / **set_cookie()** - Manage browser cookies for authentication and session handling
+All functions return JSON (or strings for page content), suitable for tool output.
 
-### 📸 Visual Capture
-- **take_screenshot()** - Capture full page, viewport, or specific elements as base64-encoded PNG images
-- Returns data URI format for easy embedding and display
+## Minimal Examples
 
-### 🔍 High-Level Automation
-- **search_google()** - Convenience function for Google searches with automatic result extraction
-- **get_network_requests()** - Monitor and capture network traffic patterns
-- **close_browser()** - Clean up resources and close browser sessions
-
-## Installation
-
-⚠️ **IMPORTANT:** See [INSTALLATION.md](./INSTALLATION.md) for detailed step-by-step instructions.
-
-### Quick Install
-
-1. **Add to OpenWebUI:** Copy [`playwright_async_tool.py`](./playwright_async_tool.py) and paste into **Workspace → Tools → + Create Tool**
-2. **Install Browser:** Run `docker exec -it open-webui playwright install chromium`
-3. **Enable Tool:** In chat, click the + icon and enable the Playwright tool
-
-### Prerequisites
-- OpenWebUI version 0.4.0 or higher
-- Docker or Python 3.11+ environment
-- ~150MB disk space for Chromium browser
-
-### Detailed Instructions
-For Docker setups, troubleshooting, and advanced configuration, see the complete [Installation Guide](./INSTALLATION.md).
-
-## Configuration (Valves)
-
-The tool provides several configuration options via Valves:
-
-| Valve | Default | Description |
-|-------|---------|-------------|
-| **BROWSER_TYPE** | `chromium` | Browser engine to use: `chromium`, `firefox`, or `webkit` |
-| **HEADLESS** | `true` | Run browser in headless mode (no visible window) |
-| **DEFAULT_TIMEOUT** | `30000` | Default timeout for operations in milliseconds |
-| **DEFAULT_NAVIGATION_TIMEOUT** | `30000` | Navigation timeout in milliseconds |
-| **VIEWPORT_WIDTH** | `1280` | Browser viewport width in pixels |
-| **VIEWPORT_HEIGHT** | `720` | Browser viewport height in pixels |
-| **USER_AGENT** | `""` | Custom user agent string (empty = browser default) |
-| **ENABLE_JAVASCRIPT** | `true` | Enable/disable JavaScript execution |
-| **MAX_SCREENSHOTS** | `5` | Maximum number of screenshots to cache in memory |
-
-## Usage Examples
-
-### Basic Web Search
+Navigate
 ```python
-# Perform a Google search
-await search_google(
-    query="latest AI developments 2024",
-    num_results=5
-)
+await navigate_to_url(url="https://example.com", wait_until="load")
 ```
 
-### Navigate and Extract Data
+Extract links
 ```python
-# Navigate to a page
-await navigate_to_url(
-    url="https://example.com/articles",
-    wait_until="networkidle"
-)
-
-# Extract article information
-await extract_elements(
-    selector="article.post",
-    attributes=["text", "href", "data-id"],
-    max_elements=10
-)
+await extract_elements(selector="a", attributes="text,href", max_elements=5)
 ```
 
-### Form Interaction
+Fill + submit
 ```python
-# Fill a search form
-await fill_input(
-    selector="#search-input",
-    value="playwright automation",
-    submit=True
-)
-
-# Click a button
-await click_element(
-    selector="button[type='submit']",
-    wait_for_navigation=True
-)
+await fill_input(selector="#q", value="playwright", submit=True)
 ```
 
-### Visual Analysis
+Screenshot
 ```python
-# Take a full-page screenshot
 await take_screenshot(full_page=True)
-
-# Screenshot a specific element
-await take_screenshot(
-    element_selector="#chart-container"
-)
 ```
 
-### Advanced JavaScript Execution
+Wait for UI
 ```python
-# Execute custom JavaScript
-await execute_javascript(
-    script="""
-        return Array.from(document.querySelectorAll('a'))
-            .map(a => ({ text: a.textContent, href: a.href }))
-            .slice(0, 10);
-    """,
-    return_result=True
-)
+await wait_for_element(selector=".results", state="visible", timeout=10000)
 ```
 
-### Cookie Management
-```python
-# Set authentication cookie
-await set_cookie(
-    name="session_token",
-    value="abc123...",
-    domain=".example.com",
-    path="/",
-    expires=1735689600
-)
+## Valves (Config)
 
-# Retrieve all cookies
-await get_cookies()
-```
-
-### Dynamic Content Handling
-```python
-# Wait for dynamic content to load
-await wait_for_element(
-    selector="div.results-loaded",
-    state="visible",
-    timeout=10000
-)
-
-# Scroll to load more content
-await scroll_page(direction="bottom")
-```
-
-## Output Format
-
-All tools return structured JSON responses:
-
-### Success Response
-```json
-{
-  "status": "success",
-  "message": "Operation completed successfully",
-  "data": { /* tool-specific data */ }
-}
-```
-
-### Error Response
-```json
-{
-  "status": "error",
-  "error": "Error type or message",
-  "message": "Detailed error description"
-}
-```
-
-### Example Screenshot Response
-```json
-{
-  "status": "success",
-  "image": "data:image/png;base64,iVBORw0KGgoAAAANS...",
-  "timestamp": "2024-10-19T14:30:45.123456",
-  "message": "Screenshot captured successfully"
-}
-```
-
-## Best Practices
-
-### Resource Management
-Always close the browser when done to free up resources:
-```python
-await close_browser()
-```
-
-### Timeout Handling
-For slow-loading pages, increase timeouts:
-```python
-await navigate_to_url(
-    url="https://slow-site.com",
-    wait_until="networkidle"  # Waits for network to be idle
-)
-```
-
-### Selector Best Practices
-Use specific selectors to avoid ambiguity:
-- ✅ `"button#submit"` - ID selector (most specific)
-- ✅ `"role=button[name='Submit']"` - ARIA role selector
-- ✅ `"text=Click Here"` - Text content selector
-- ⚠️ `"button"` - Too generic, matches first button
-
-### Error Handling
-The tool returns structured errors. Always check the `status` field:
-```javascript
-const result = JSON.parse(await navigate_to_url(...));
-if (result.status === "error") {
-    console.error(result.message);
-}
-```
+- BROWSER_TYPE: `chromium` | `firefox` | `webkit` (default `chromium`)
+- HEADLESS: bool (default `true`, plus auto-headless when no DISPLAY)
+- DEFAULT_TIMEOUT: ms (default `30000`)
+- VIEWPORT_WIDTH / VIEWPORT_HEIGHT: ints (default `1280`/`720`)
 
 ## Troubleshooting
 
-### Browser Not Launching
+- Missing browser binary
+  - Docker: `docker exec -it open-webui playwright install chromium`
+  - Local: `playwright install chromium` (and `playwright install-deps chromium` on Linux if needed)
 
-**Error:** `Executable doesn't exist` or `Browser not found`
+- X server errors (Missing DISPLAY)
+  - The tool now auto-enables headless. If you still need headed in CI, use `xvfb-run`.
 
-**Solution:** You need to install browser binaries:
+- Timeouts / dynamic pages
+  - Use `wait_until="domcontentloaded"` or `"networkidle"`
+  - Call `wait_for_element(...)` before interacting
 
-```bash
-# For Docker installations
-docker exec -it open-webui playwright install chromium
+- Cleanup
+  - Always call `close_browser()` when done to free resources
 
-# For non-Docker installations  
-playwright install chromium
+## Notes
 
-# If you need system dependencies (Linux)
-playwright install-deps chromium
-```
-
-**For Docker users:** You may need to install additional system dependencies. Add this to your Dockerfile or run:
-
-```bash
-docker exec -u root -it open-webui apt-get update && apt-get install -y \
-    libnss3 \
-    libnspr4 \
-    libdbus-1-3 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libcups2 \
-    libdrm2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxfixes3 \
-    libxrandr2 \
-    libgbm1 \
-    libasound2
-```
-
-### Timeout Errors
-- Increase `DEFAULT_TIMEOUT` in Valves
-- Use `wait_until="domcontentloaded"` instead of `"load"` for faster navigation
-- Check if the target website is accessible
-
-### Element Not Found
-- Use `wait_for_element()` before interacting with dynamic content
-- Verify selectors in browser DevTools
-- Try different selector strategies (CSS, text, role)
-
-### Memory Issues
-- Reduce `MAX_SCREENSHOTS` in Valves
-- Call `close_browser()` regularly to free resources
-- Use `element_selector` for screenshots instead of `full_page`
-
-## Security Considerations
-
-⚠️ **Important Security Notes:**
-
-1. **User Input Validation**: This tool executes arbitrary JavaScript and navigates to user-provided URLs. Ensure proper input validation.
-2. **Sandboxing**: Run in isolated environments when possible
-3. **Cookie Security**: Cookies are stored in memory and cleared on browser close
-4. **Screenshot Privacy**: Screenshots may contain sensitive information
-5. **Rate Limiting**: Implement rate limits to prevent abuse
-
-## Contributing
-
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Submit a pull request
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Support
-
-For issues, questions, or feature requests, please open an issue on GitHub.
-
-## Credits
-
-Built with:
-- [Playwright](https://playwright.dev/) - Browser automation framework
-- [OpenWebUI](https://github.com/open-webui/open-webui) - AI interface platform
-
-## Changelog
-
-### v1.0.0 (2024-10-19)
-- Initial release
-- Support for Chromium, Firefox, and WebKit browsers
-- 15+ automation tools covering navigation, interaction, extraction, and capture
-- Configurable valves for customization
-- Comprehensive error handling and JSON output format
+- This repo intentionally ships with one script and one README for simplicity.
+- License: MIT (see LICENSE)
+- Credits: Playwright, OpenWebUI

@@ -5,7 +5,7 @@ author_url: https://github.com/open-webui/open-webui
 git_url: https://github.com/open-webui/open-webui
 description: A comprehensive Playwright-based web automation tool that enables models to search the web, interact with pages, extract content, take screenshots, and perform advanced browser automation tasks.
 required_open_webui_version: 0.4.0
-requirements: playwright, playwright-python
+requirements: playwright
 version: 1.0.0
 licence: MIT
 """

@@ -2,6 +2,12 @@
 
 A comprehensive Playwright-based web automation tool that enables AI models in OpenWebUI to search the web, interact with pages, extract content, take screenshots, and perform advanced browser automation tasks.
 
+## 🎯 Which File to Use?
+
+**Use `playwright_web_tool.py` (v2.0.0)** - Synchronous version that works correctly with OpenWebUI
+
+~~`playwright_web_search_tool.py` (v1.0.1)~~ - Async version (deprecated, kept for reference)
+
 ## Features
 
 ### 🌐 Navigation & Page Control
@@ -34,7 +40,7 @@ A comprehensive Playwright-based web automation tool that enables AI models in O
 
 ### Quick Install
 
-1. **Add to OpenWebUI:** Copy [`playwright_web_search_tool.py`](./playwright_web_search_tool.py) and paste into **Workspace → Tools → + Create Tool**
+1. **Add to OpenWebUI:** Copy [`playwright_web_tool.py`](./playwright_web_tool.py) and paste into **Workspace → Tools → + Create Tool**
 2. **Install Browser:** Run `docker exec -it open-webui playwright install chromium`
 3. **Enable Tool:** In chat, click the + icon and enable the Playwright tool
 

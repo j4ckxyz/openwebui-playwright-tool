@@ -14,7 +14,7 @@ Steps
    - Local: `playwright install chromium`
 3) In chat: click + and enable the tool
 
-Headless auto: If no DISPLAY is present (servers/containers), the tool launches headless automatically. You can still force headed by setting the `HEADLESS` valve to false when running with a display.
+Headless-only: The tool always launches headless for reliability across servers, containers, and CI. No headed mode is exposed.
 
 ## What You Get
 
@@ -62,7 +62,6 @@ await wait_for_element(selector=".results", state="visible", timeout=10000)
 ## Valves (Config)
 
 - BROWSER_TYPE: `chromium` | `firefox` | `webkit` (default `chromium`)
-- HEADLESS: bool (default `true`, plus auto-headless when no DISPLAY)
 - DEFAULT_TIMEOUT: ms (default `30000`)
 - VIEWPORT_WIDTH / VIEWPORT_HEIGHT: ints (default `1280`/`720`)
 
@@ -73,7 +72,7 @@ await wait_for_element(selector=".results", state="visible", timeout=10000)
   - Local: `playwright install chromium` (and `playwright install-deps chromium` on Linux if needed)
 
 - X server errors (Missing DISPLAY)
-  - The tool now auto-enables headless. If you still need headed in CI, use `xvfb-run`.
+  - Not applicable: the tool is headless-only. If a GUI is absolutely required in CI, wrap commands with `xvfb-run`, but the tool itself remains headless.
 
 - Timeouts / dynamic pages
   - Use `wait_until="domcontentloaded"` or `"networkidle"`

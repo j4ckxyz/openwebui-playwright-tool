@@ -36,12 +36,31 @@ A comprehensive Playwright-based web automation tool that enables AI models in O
 
 ### Install Dependencies
 
-The tool will automatically install required packages when loaded in OpenWebUI, but you can also install them manually:
+**IMPORTANT:** The tool will automatically install the `playwright` package when you save it in OpenWebUI, but you **MUST** manually install the browser binaries afterward.
+
+#### Step 1: Save the Tool in OpenWebUI
+1. Copy the contents of `playwright_web_search_tool.py`
+2. In OpenWebUI, navigate to **Workspace → Tools**
+3. Click **"+ Create Tool"**
+4. Paste the code and click **Save**
+5. Wait for the `playwright` package to install
+
+#### Step 2: Install Browser Binaries
+After the tool is saved, you need to install browser binaries. SSH into your OpenWebUI server or Docker container and run:
 
 ```bash
-pip install playwright playwright-python
-playwright install chromium  # or firefox/webkit
+# For Docker installations
+docker exec -it open-webui playwright install chromium
+
+# For non-Docker installations
+playwright install chromium
+
+# Optional: Install other browsers
+playwright install firefox
+playwright install webkit
 ```
+
+**Note:** Installing all browsers takes ~500MB of disk space. Installing just Chromium takes ~150MB.
 
 ### Add to OpenWebUI
 
@@ -230,11 +249,40 @@ if (result.status === "error") {
 ## Troubleshooting
 
 ### Browser Not Launching
+
+**Error:** `Executable doesn't exist` or `Browser not found`
+
+**Solution:** You need to install browser binaries:
+
 ```bash
-# Install browsers manually
+# For Docker installations
+docker exec -it open-webui playwright install chromium
+
+# For non-Docker installations  
 playwright install chromium
-playwright install firefox
-playwright install webkit
+
+# If you need system dependencies (Linux)
+playwright install-deps chromium
+```
+
+**For Docker users:** You may need to install additional system dependencies. Add this to your Dockerfile or run:
+
+```bash
+docker exec -u root -it open-webui apt-get update && apt-get install -y \
+    libnss3 \
+    libnspr4 \
+    libdbus-1-3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2
 ```
 
 ### Timeout Errors

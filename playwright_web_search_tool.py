@@ -2,12 +2,15 @@
 title: Playwright Web Search & Automation Tool
 author: OpenWebUI Community
 author_url: https://github.com/open-webui/open-webui
-git_url: https://github.com/open-webui/open-webui
+git_url: https://github.com/j4ckxyz/openwebui-playwright-tool
 description: A comprehensive Playwright-based web automation tool that enables models to search the web, interact with pages, extract content, take screenshots, and perform advanced browser automation tasks.
 required_open_webui_version: 0.4.0
 requirements: playwright
-version: 1.0.0
+version: 1.0.1
 licence: MIT
+
+IMPORTANT: After installing, you MUST run 'playwright install chromium' in your terminal
+to download the browser binaries. See README for full installation instructions.
 """
 
 import asyncio

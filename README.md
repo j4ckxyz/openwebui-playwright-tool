@@ -4,9 +4,14 @@ A comprehensive Playwright-based web automation tool that enables AI models in O
 
 ## 🎯 Which File to Use?
 
-**Use `playwright_web_tool.py` (v2.0.0)** - Synchronous version that works correctly with OpenWebUI
+### ✅ **Use `playwright_async_tool.py` (v3.0.0)** ← **RECOMMENDED**
+- Async API (works in OpenWebUI's async context)
+- Fixes "Sync API in asyncio loop" error
+- Latest and most compatible version
 
-~~`playwright_web_search_tool.py` (v1.0.1)~~ - Async version (deprecated, kept for reference)
+### Other Versions (for reference)
+- `playwright_web_tool.py` (v2.0.0) - Sync version (causes errors in async environments)
+- `playwright_web_search_tool.py` (v1.0.1) - Old async version (deprecated)
 
 ## Features
 
@@ -40,7 +45,7 @@ A comprehensive Playwright-based web automation tool that enables AI models in O
 
 ### Quick Install
 
-1. **Add to OpenWebUI:** Copy [`playwright_web_tool.py`](./playwright_web_tool.py) and paste into **Workspace → Tools → + Create Tool**
+1. **Add to OpenWebUI:** Copy [`playwright_async_tool.py`](./playwright_async_tool.py) and paste into **Workspace → Tools → + Create Tool**
 2. **Install Browser:** Run `docker exec -it open-webui playwright install chromium`
 3. **Enable Tool:** In chat, click the + icon and enable the Playwright tool
 

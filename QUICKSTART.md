@@ -2,7 +2,7 @@
 
 ## Step 1: Copy the Tool Code
 
-1. Open [`playwright_web_tool.py`](./playwright_web_tool.py)
+1. Open [`playwright_async_tool.py`](./playwright_async_tool.py)
 2. Copy all the code (Ctrl+A, Ctrl+C)
 
 ## Step 2: Add to OpenWebUI

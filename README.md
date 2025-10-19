@@ -29,6 +29,10 @@ Headless-only: The tool always launches headless for reliability across servers,
 - search_google(query, num_results)
 - scroll_page(direction)
 - close_browser()
+- click_by_text(text, exact=False, wait_for_navigation=True)
+- accept_cookies()
+- read_page(main_selectors=..., include_html=False)
+- open_latest_post(base_url, post_link_selectors=..., also_try_read_more=True)
 
 All functions return JSON (or strings for page content), suitable for tool output.
 
